@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mal-ketb <mal-ketb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/02 20:48:47 by mal-ketb          #+#    #+#             */
-/*   Updated: 2024/06/10 16:07:14 by mal-ketb         ###   ########.fr       */
+/*   Created: 2024/06/09 23:45:22 by mal-ketb          #+#    #+#             */
+/*   Updated: 2024/06/10 14:42:11 by mal-ketb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 size_t ft_strlen(const char *str)
 {
-	size_t	i;
+	size_t i;
 
 	i = 0;
 	while (str[i] != '\0')
@@ -22,11 +22,11 @@ size_t ft_strlen(const char *str)
 	return (i);
 }
 
-int	ft_atoi(const char *str)
+int ft_atoi(const char *str)
 {
-	int	i;
-	int	result;
-	int	sign;
+	int i;
+	int result;
+	int sign;
 
 	i = 0;
 	result = 0;
@@ -47,10 +47,17 @@ int	ft_atoi(const char *str)
 	return (result * sign);
 }
 
+void confirm_message(int signal)
+{
+	if (signal == SIGUSR1)
+		write(1, "The signal has been recieved,", 28);
+	exit(1);
+}
+
 void char_to_bits(int pid, char *str)
 {
-	int	i;
-	int	bits;
+	int i;
+	int bits;
 
 	i = 0;
 	while (str[i] != '\0')
@@ -58,21 +65,34 @@ void char_to_bits(int pid, char *str)
 		bits = 7;
 		while (bits >= 0)
 		{
-			if ((str[i] >> bits) & 1)
+			if (((str[i] >> bits) & 1))
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
-			usleep(150);
+			usleep(300);
 			bits--;
 		}
 		i++;
 	}
+	bits = 7;
+	while (bits >= 0)
+	{
+		if (((str[i] >> bits) & 1))
+			kill(pid, SIGUSR1);
+		else
+			kill(pid, SIGUSR2);
+		usleep(300);
+		bits--;
+	}
+
+
+
 }
 
-int	main(int ac, char **av)
+int main(int ac, char **av)
 {
-	int	pid;
-	
+	int pid;
+
 	if (ac != 3)
 		write(1, "Insufficient amount of arguments\n", 33);
 	pid = ft_atoi(av[1]);
@@ -83,7 +103,11 @@ int	main(int ac, char **av)
 		write(1, "Message is empty\n", 17);
 		return (1);
 	}
+	struct sigaction sa;
+	sa.sa_handler = confirm_message;
+	sa.sa_flags = SA_RESTART;
+	sigaction(SIGUSR1, &sa, NULL);
 	char_to_bits(pid, av[2]);
-	ft_strlen(av[2]);
+	pause();
 	return (0);
 }
