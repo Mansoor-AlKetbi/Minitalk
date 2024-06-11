@@ -1,3 +1,4 @@
+NAME = minitalk.a
 
 CLIENT = client.c
 
@@ -7,13 +8,13 @@ CLIENT_NAME = client
 
 SERVER_NAME = server
 
-CLIENT_B = client_bonus.c
+CLIENT_BONUS = client_bonus.c
 
-SERVER_B = server_bonus.c
+SERVER_BONUS = server_bonus.c
 
-CLIENT_NAME_B = client_bonus
+CLIENT_NAME_BONUS = client_bonus
 
-SERVER_NAME_B = server_bonus
+SERVER_NAME_BONUS = server_bonus
 
 CC = gcc
 
@@ -29,13 +30,13 @@ $(SERVER_NAME) : $(SERVER)
 $(CLIENT_NAME) : $(CLIENT)
 	$(CC) $(FLAGS) $(CLIENT) -o $(CLIENT_NAME)
 
-$(SERVER_NAME_B) : $(SERVER_B)
-	$(CC) $(FLAGS) $(SERVER_B) -o $(SERVER_NAME_B)
+$(SERVER_NAME_BONUS) : $(SERVER_BONUS)
+	$(CC) $(FLAGS) $(SERVER_BONUS) -o $(SERVER_NAME_BONUS)
 
-$(CLIENT_NAME_B) : $(CLIENT_B)
-	$(CC) $(FLAGS) $(CLIENT_B) -o $(CLIENT_NAME_B)
+$(CLIENT_NAME_BONUS) : $(CLIENT_BONUS)
+	$(CC) $(FLAGS) $(CLIENT_BONUS) -o $(CLIENT_NAME_BONUS)
 
-bonus: $(CLIENT_NAME_B) $(SERVER_NAME_B)
+bonus: $(CLIENT_NAME_BONUS) $(SERVER_NAME_BONUS)
 
 clean:
 	$(RM) server.o client.o
@@ -43,7 +44,7 @@ clean:
 
 fclean: clean
 	$(RM) server client
-	$(RM) server_bonus client_bonus
+	$(RM) server_bonus client_bonus minitalk.a
 
 re: fclean all bonus
 

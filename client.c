@@ -6,13 +6,13 @@
 /*   By: mal-ketb <mal-ketb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 20:48:47 by mal-ketb          #+#    #+#             */
-/*   Updated: 2024/06/10 16:07:14 by mal-ketb         ###   ########.fr       */
+/*   Updated: 2024/06/11 22:02:11 by mal-ketb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-size_t ft_strlen(const char *str)
+size_t	ft_strlen(const char *str)
 {
 	size_t	i;
 
@@ -47,7 +47,7 @@ int	ft_atoi(const char *str)
 	return (result * sign);
 }
 
-void char_to_bits(int pid, char *str)
+void	char_to_bits(int pid, char *str)
 {
 	int	i;
 	int	bits;
@@ -72,11 +72,11 @@ void char_to_bits(int pid, char *str)
 int	main(int ac, char **av)
 {
 	int	pid;
-	
+
 	if (ac != 3)
 		write(1, "Insufficient amount of arguments\n", 33);
 	pid = ft_atoi(av[1]);
-	if (pid == 0)
+	if (pid <= 0)
 		write(1, "The pid is incorrect", 20);
 	if (ft_strlen(av[2]) == 0)
 	{

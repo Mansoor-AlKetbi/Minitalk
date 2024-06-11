@@ -6,16 +6,41 @@
 /*   By: mal-ketb <mal-ketb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 15:38:49 by mal-ketb          #+#    #+#             */
-/*   Updated: 2024/06/05 21:02:46 by mal-ketb         ###   ########.fr       */
+/*   Updated: 2024/06/11 20:32:15 by mal-ketb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void signal_handle(int sig)
+void	ft_putchar_fd(char c, int fd)
 {
-	static char word;
-	static int bit;
+	write(fd, &c, 1);
+}
+
+void	ft_putnbr_fd(int n, int fd)
+{
+	if (n == -2147483648)
+	{
+		write(fd, "-2147483648", 11);
+		return ;
+	}
+	else if (n < 0)
+	{
+		ft_putchar_fd('-', fd);
+		n *= -1;
+	}
+	if (n >= 10)
+	{
+		ft_putnbr_fd(n / 10, fd);
+	}
+	n = n % 10 + '0';
+	ft_putchar_fd(n, fd);
+}
+
+void	signal_handle(int sig)
+{
+	static char	word;
+	static int	bit;
 
 	if (sig == SIGUSR1)
 		word = ((word << 1) | 1);
@@ -30,12 +55,14 @@ void signal_handle(int sig)
 	}
 }
 
-int main()
+int	main(void)
 {
-	pid_t pid;
+	pid_t	pid;
 
 	pid = getpid();
-	printf("PID: %d\n", pid);
+	write(1, "PID: ", 5);
+	ft_putnbr_fd(pid, 1);
+	write(1, "\n", 1);
 	signal(SIGUSR1, signal_handle);
 	signal(SIGUSR2, signal_handle);
 	while (1)
